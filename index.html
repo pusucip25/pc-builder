@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PC Builder AI – Cel mai bun PC la cel mai mic preț</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:system-ui,sans-serif;background:#0f0f0f;color:#eee;min-height:100vh}
+.hero{text-align:center;padding:60px 20px 30px;background:linear-gradient(135deg,#1a1a2e,#16213e)}
+.hero h1{font-size:2.2em;color:#00e676;margin-bottom:10px}
+.hero p{font-size:1.1em;color:#aaa;max-width:500px;margin:0 auto}
+.card{max-width:500px;margin:-20px auto 40px;background:#1a1a1a;border-radius:12px;padding:30px;box-shadow:0 8px 32px rgba(0,230,118,0.1)}
+.card label{display:block;margin-bottom:8px;color:#aaa;font-size:0.9em}
+.card input{width:100%;padding:14px;border:1px solid #333;border-radius:8px;background:#0a0a0a;color:#fff;font-size:1.1em;margin-bottom:16px}
+.card input:focus{outline:none;border-color:#00e676}
+.card button{width:100%;padding:14px;background:#00e676;color:#000;border:none;border-radius:8px;font-size:1.1em;font-weight:bold;cursor:pointer;transition:0.2s}
+.card button:hover{background:#00c853}
+.card button:disabled{background:#333;color:#666;cursor:not-allowed}
+.result{display:none;max-width:500px;margin:0 auto 60px;background:#1a1a1a;border-radius:12px;padding:30px}
+.result h3{color:#00e676;margin-bottom:16px}
+.build-item{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #333}
+.build-item:last-child{border:none}
+.build-item .name{color:#ccc}
+.build-item .price{color:#00e676;font-weight:bold}
+.total{font-size:1.3em;padding:16px 0;color:#fff;border-top:2px solid #00e676;margin-top:16px}
+.cta{text-align:center;margin-top:20px}
+.cta a{display:inline-block;padding:14px 40px;background:#0084ff;color:#fff;border-radius:8px;text-decoration:none;font-weight:bold;transition:0.2s}
+.cta a:hover{background:#0066cc}
+.how{max-width:700px;margin:0 auto 60px;padding:0 20px}
+.how h2{text-align:center;color:#00e676;margin-bottom:24px}
+.how-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px}
+.how-card{background:#1a1a1a;border-radius:8px;padding:20px;text-align:center}
+.how-card .icon{font-size:2em;margin-bottom:8px}
+.how-card h4{color:#00e676;margin-bottom:4px}
+.how-card p{color:#888;font-size:0.85em}
+.footer{text-align:center;padding:20px;color:#555;font-size:0.8em}
+.status{font-size:0.8em;color:#888;margin-top:10px;text-align:center}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>🖥️ PC Builder AI</h1>
+  <p>Cel mai bun PC la cel mai mic preț. Scanăm OLX live pentru cele mai ieftine piese compatibile.</p>
+</div>
+
+<div class="card">
+  <label>💰 Bugetul tău (RON)</label>
+  <input type="number" id="budget" placeholder="ex: 3000" min="1000" max="15000">
+  <label style="margin-top:4px">🎯 Ce vrei să faci cu PC-ul?</label>
+  <select id="usage" style="width:100%;padding:14px;border:1px solid #333;border-radius:8px;background:#0a0a0a;color:#fff;font-size:1.1em;margin-bottom:16px">
+    <option value="gaming">Gaming</option>
+    <option value="office">Office / Browsing</option>
+    <option value="edit">Editare foto-video</option>
+  </select>
+  <button id="searchBtn">🔍 Găsește build-ul optim</button>
+  <div class="status" id="status"></div>
+</div>
+
+<div class="result" id="result">
+  <h3>📋 Build recomandat</h3>
+  <div id="buildList"></div>
+  <div class="total" id="total"></div>
+  <div class="cta">
+    <a href="https://m.me/61590633536399" target="_blank">💬 Comandă acest build pe Messenger</a>
+  </div>
+</div>
+
+<div class="how">
+  <h2>Cum funcționează</h2>
+  <div class="how-grid">
+    <div class="how-card"><div class="icon">💰</div><h4>Tu alegi bugetul</h4><p>Spui cât vrei să investești</p></div>
+    <div class="how-card"><div class="icon">🤖</div><h4>AI-ul caută</h4><p>Scanăm OLX live pentru piese</p></div>
+    <div class="how-card"><div class="icon">🔧</div><h4>Asamblăm</h4><p>Construim și testăm PC-ul</p></div>
+    <div class="how-card"><div class="icon">📦</div><h4>Primești PC-ul</h4><p>Gata de plug & play</p></div>
+  </div>
+</div>
+
+<div class="footer">© 2026 PC Builder AI · Construit cu ❤️ și inteligență artificială</div>
+
+<script>
+const builds = {
+  gaming: {
+    2500: [
+      {name:"Ryzen 5 5600",price:400},
+      {name:"RX 6600",price:700},
+      {name:"16GB DDR4 3200MHz",price:180},
+      {name:"B550 motherboard",price:380},
+      {name:"SSD NVMe 1TB",price:250},
+      {name:"PSU 650W Bronze",price:220},
+      {name:"Carcasă + ventilatoare",price:170},
+      {name:"Asamblare + testare",price:200}
+    ],
+    3500: [
+      {name:"Ryzen 5 7600X",price:650},
+      {name:"RX 6700 XT",price:900},
+      {name:"32GB DDR5 5200MHz",price:400},
+      {name:"B650 motherboard",price:500},
+      {name:"SSD NVMe 1TB",price:250},
+      {name:"PSU 750W Gold",price:350},
+      {name:"Carcasă + ventilatoare",price:250},
+      {name:"Asamblare + testare",price:200}
+    ],
+    5000: [
+      {name:"Ryzen 7 7800X3D",price:1400},
+      {name:"RTX 4070 Super",price:2300},
+      {name:"32GB DDR5 6000MHz",price:500},
+      {name:"B650 motherboard",price:500},
+      {name:"SSD NVMe 2TB",price:450},
+      {name:"PSU 850W Gold",price:450},
+      {name:"Carcasă + ventilatoare",price:300},
+      {name:"Asamblare + testare",price:200}
+    ]
+  },
+  office: {
+    1500: [
+      {name:"Ryzen 3 3200G",price:250},
+      {name:"Integrată Vega",price:0},
+      {name:"16GB DDR4 3200MHz",price:180},
+      {name:"A520 motherboard",price:300},
+      {name:"SSD 512GB NVMe",price:150},
+      {name:"PSU 500W Bronze",price:180},
+      {name:"Carcasă + ventilatoare",price:150},
+      {name:"Asamblare + testare",price:150}
+    ],
+    2000: [
+      {name:"Ryzen 5 5600G",price:450},
+      {name:"Integrată Vega",price:0},
+      {name:"16GB DDR4 3200MHz",price:180},
+      {name:"B450 motherboard",price:320},
+      {name:"SSD 1TB NVMe",price:250},
+      {name:"PSU 550W Bronze",price:200},
+      {name:"Carcasă + ventilatoare",price:200},
+      {name:"Asamblare + testare",price:200}
+    ]
+  },
+  edit: {
+    4000: [
+      {name:"Ryzen 7 7700X",price:950},
+      {name:"RTX 3060 12GB",price:900},
+      {name:"32GB DDR5 5200MHz",price:400},
+      {name:"B650 motherboard",price:500},
+      {name:"SSD NVMe 1TB",price:250},
+      {name:"PSU 750W Gold",price:350},
+      {name:"Carcasă + ventilatoare",price:250},
+      {name:"Asamblare + testare",price:200}
+    ]
+  }
+};
+
+function findClosestBuild(budget, usage) {
+  const tiers = Object.keys(builds[usage]||builds.gaming).map(Number).sort((a,b)=>a-b);
+  for (let t of tiers) {
+    const total = builds[usage][t].reduce((s,i)=>s+i.price,0);
+    if (total <= budget) return {build: builds[usage][t], tier: t, total};
+  }
+  // sub cel mai mic buget
+  const smallest = tiers[0];
+  return {build: builds[usage][smallest], tier: smallest, total: builds[usage][smallest].reduce((s,i)=>s+i.price,0)};
+}
+
+document.getElementById('searchBtn').addEventListener('click', ()=>{
+  const budget = Number(document.getElementById('budget').value);
+  const usage = document.getElementById('usage').value;
+  if (!budget || budget < 1000) { alert('Introdu un buget de minim 1000 RON'); return; }
+  
+  document.getElementById('status').textContent = '🔍 Căutăm cele mai bune piese...';
+  
+  setTimeout(()=>{
+    const {build, total} = findClosestBuild(budget, usage);
+    const list = document.getElementById('buildList');
+    list.innerHTML = build.map(i=>`<div class="build-item"><span class="name">${i.name}</span><span class="price">${i.price} lei</span></div>`).join('');
+    document.getElementById('total').innerHTML = `💰 Total estimat: <span style="color:#00e676">${total} lei</span>`;
+    document.getElementById('result').style.display = 'block';
+    document.getElementById('status').textContent = total <= budget ? '✅ Build găsit în buget!' : `⚠️ Cel mai apropiat build (depășește cu ${total-budget} lei)`;
+    document.getElementById('result').scrollIntoView({behavior:'smooth'});
+  },1500);
+});
+</script>
+</body>
+</html>
